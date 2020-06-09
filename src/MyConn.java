@@ -69,9 +69,28 @@ public class MyConn {
 
     public static void agregarproductoexistente(String articulo, int cantidad) {
         try {
+            ArrayList<String> productos = new ArrayList<>();
             Connection miconexion = DriverManager.getConnection(miConex, miUser, miPass);
             Statement miStat = miconexion.createStatement();
             miStat.executeUpdate("UPDATE productos SET cantidad=" + cantidad + " WHERE nombre='" + articulo + "'");
+            ResultSet miResul = miStat.executeQuery("SELECT historico FROM productos WHERE nombre='"+articulo+"'");
+            while (miResul.next()) {
+                productos.add(miResul.getString("historico"));
+            }
+            int historico = Integer.parseInt(productos.get(0)) + cantidad;
+            miStat.executeUpdate("UPDATE productos SET historico=" +historico+ " WHERE nombre='" + articulo + "'");
+            System.out.println(historico);
+            miStat.close();
+            miconexion.close();
+        } catch (Exception e) {
+            System.out.println("error conexion: " + e);
+        }
+    }
+    public static void agregarnuevoproducto(String nombre, int cantidad, double precio){
+        try {
+            Connection miconexion = DriverManager.getConnection(miConex, miUser, miPass);
+            Statement miStat = miconexion.createStatement();
+            miStat.executeUpdate("INSERT INTO productos (nombre, cantidad, historico, precio) VALUES ('"+nombre+"', "+cantidad+", "+cantidad+", "+precio+")");
             miStat.close();
             miconexion.close();
         } catch (Exception e) {

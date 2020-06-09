@@ -6,6 +6,7 @@ public class Main {
     private JPanel panelprincipal;
     private JButton nuevaventa;
     private JButton agregar;
+    private JButton creararticulo;
 
     public Main() {
 
@@ -21,6 +22,13 @@ public class Main {
             public void actionPerformed(ActionEvent e) {
                 AddProducts agregar = new AddProducts();
                 agregar.crearventanaventa();
+            }
+        });
+        creararticulo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CreateItem nuevo = new CreateItem();
+                nuevo.crearventanaagregar();
             }
         });
     }
