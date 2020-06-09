@@ -5,14 +5,22 @@ import java.awt.event.ActionListener;
 public class Main {
     private JPanel panelprincipal;
     private JButton nuevaventa;
+    private JButton agregar;
 
     public Main() {
 
         nuevaventa.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                NuevaVenta venta = new NuevaVenta();
+                NewSale venta = new NewSale();
                 venta.crearventanaventa();
+            }
+        });
+        agregar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AddProducts agregar = new AddProducts();
+                agregar.crearventanaventa();
             }
         });
     }

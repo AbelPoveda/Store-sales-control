@@ -3,7 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class NuevaVenta {
+public class NewSale {
     private JPanel nuevaventa;
     private JComboBox articulos;
     private JTextField cantidad;
@@ -16,7 +16,7 @@ public class NuevaVenta {
     private double cantidadtotal = 0.0;
     private ArrayList<String> articuloscomprados = new ArrayList<>();
 
-    public NuevaVenta() {
+    public NewSale() {
 
         DefaultListModel modelo = new DefaultListModel();
         lista.setModel(modelo);
@@ -32,19 +32,19 @@ public class NuevaVenta {
         });
 
         //--------rellenar combobox---------
-        ArrayList<String> a = new ArrayList<>(Conexion.sacarproductos("SELECT nombre FROM productos"));
+        ArrayList<String> a = new ArrayList<>(MyConn.sacarproductos("SELECT nombre FROM productos"));
         for (int b = 0; b < a.size(); b++) {
             articulos.addItem(a.get(b));
         }
         //--------mostrar unidades disponibles del articulo seleccionado
-        disponibles.setText("Unidades disponibles: " + Conexion.sacarunidades(articulos.getSelectedItem().toString()));
+        disponibles.setText("Unidades disponibles: " + MyConn.sacarunidades(articulos.getSelectedItem().toString()));
 
         botonadd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String articulo = articulos.getSelectedItem().toString();
                 int unidades = Integer.parseInt(cantidad.getText());
-                double precio = Conexion.sacarprecio(articulo);
+                double precio = MyConn.sacarprecio(articulo);
                 cantidadtotal += precio * unidades;
                 total.setText(String.valueOf(cantidadtotal));
                 articuloscomprados.add(articulo);
@@ -56,8 +56,8 @@ public class NuevaVenta {
 
     public void crearventanaventa() {
         JFrame ventana = new JFrame("Venta");
-        ventana.setContentPane(new NuevaVenta().nuevaventa);
-        ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ventana.setContentPane(new NewSale().nuevaventa);
+        ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         ventana.pack();
         ventana.setVisible(true);
     }

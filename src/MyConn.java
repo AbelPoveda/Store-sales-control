@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class Conexion {
+public class MyConn {
     private static String miConex = "jdbc:mysql://localhost:3306/fruteria?useSSL=false";
     private static String miPass = "root";
     private static String miUser = "root";
@@ -18,6 +18,7 @@ public class Conexion {
             while (miResul.next()) {
                 productos.add(miResul.getString(1));
             }
+            miStat.close();
             miconexion.close();
             return productos;
         } catch (Exception e) {
@@ -32,11 +33,12 @@ public class Conexion {
         try {
             Connection miconexion = DriverManager.getConnection(miConex, miUser, miPass);
             Statement miStat = miconexion.createStatement();
-            ResultSet miResul = miStat.executeQuery("SELECT precio FROM productos WHERE nombre='"+ producto +"'");
+            ResultSet miResul = miStat.executeQuery("SELECT precio FROM productos WHERE nombre='" + producto + "'");
             while (miResul.next()) {
                 productos.add(miResul.getString("precio"));
             }
             precio = Double.parseDouble(productos.get(0));
+            miStat.close();
             miconexion.close();
             return precio;
         } catch (Exception e) {
@@ -44,22 +46,36 @@ public class Conexion {
             return 0.0;
         }
     }
+
     public static int sacarunidades(String producto) {
         int unidades;
         ArrayList<String> productos = new ArrayList<>();
         try {
             Connection miconexion = DriverManager.getConnection(miConex, miUser, miPass);
             Statement miStat = miconexion.createStatement();
-            ResultSet miResul = miStat.executeQuery("SELECT cantidad FROM productos WHERE nombre='"+ producto +"'");
+            ResultSet miResul = miStat.executeQuery("SELECT cantidad FROM productos WHERE nombre='" + producto + "'");
             while (miResul.next()) {
                 productos.add(miResul.getString("cantidad"));
             }
             unidades = Integer.parseInt(productos.get(0));
+            miStat.close();
             miconexion.close();
             return unidades;
         } catch (Exception e) {
             System.out.println("error conexion: " + e);
             return 0;
+        }
+    }
+
+    public static void agregarproductoexistente(String articulo, int cantidad) {
+        try {
+            Connection miconexion = DriverManager.getConnection(miConex, miUser, miPass);
+            Statement miStat = miconexion.createStatement();
+            miStat.executeUpdate("UPDATE productos SET cantidad=" + cantidad + " WHERE nombre='" + articulo + "'");
+            miStat.close();
+            miconexion.close();
+        } catch (Exception e) {
+            System.out.println("error conexion: " + e);
         }
     }
 }
