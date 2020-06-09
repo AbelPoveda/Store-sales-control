@@ -72,14 +72,14 @@ public class MyConn {
             ArrayList<String> productos = new ArrayList<>();
             Connection miconexion = DriverManager.getConnection(miConex, miUser, miPass);
             Statement miStat = miconexion.createStatement();
-            miStat.executeUpdate("UPDATE productos SET cantidad=" + cantidad + " WHERE nombre='" + articulo + "'");
+            int nuevacantidad = MyConn.sacarunidades(articulo) + cantidad;
+            miStat.executeUpdate("UPDATE productos SET cantidad=" + nuevacantidad + " WHERE nombre='" + articulo + "'");
             ResultSet miResul = miStat.executeQuery("SELECT historico FROM productos WHERE nombre='"+articulo+"'");
             while (miResul.next()) {
                 productos.add(miResul.getString("historico"));
             }
             int historico = Integer.parseInt(productos.get(0)) + cantidad;
             miStat.executeUpdate("UPDATE productos SET historico=" +historico+ " WHERE nombre='" + articulo + "'");
-            System.out.println(historico);
             miStat.close();
             miconexion.close();
         } catch (Exception e) {

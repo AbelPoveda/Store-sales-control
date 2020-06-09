@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
 public class NewSale {
@@ -17,7 +19,6 @@ public class NewSale {
     private ArrayList<String> articuloscomprados = new ArrayList<>();
 
     public NewSale() {
-
         DefaultListModel modelo = new DefaultListModel();
         lista.setModel(modelo);
 
@@ -36,8 +37,8 @@ public class NewSale {
         for (int b = 0; b < a.size(); b++) {
             articulos.addItem(a.get(b));
         }
-        //--------mostrar unidades disponibles del articulo seleccionado
         disponibles.setText("Unidades disponibles: " + MyConn.sacarunidades(articulos.getSelectedItem().toString()));
+
 
         botonadd.addActionListener(new ActionListener() {
             @Override
@@ -48,10 +49,16 @@ public class NewSale {
                 cantidadtotal += precio * unidades;
                 total.setText(String.valueOf(cantidadtotal));
                 articuloscomprados.add(articulo);
-                modelo.addElement(articulo + ": " + precio + " x " + unidades + " = " + precio * unidades);
+                modelo.addElement(articulo + ": " + precio + " x " + unidades + " = " + precio * unidades + "€");
             }
         });
 
+        articulos.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                disponibles.setText("Unidades disponibles: " + MyConn.sacarunidades(articulos.getSelectedItem().toString()));
+            }
+        });
     }
 
     public void crearventanaventa() {

@@ -20,7 +20,7 @@ public class AddProducts {
             public void actionPerformed(ActionEvent e) {
                 int cantidad = Integer.parseInt(unidades.getValue().toString());
                 String articulo = articulos.getSelectedItem().toString();
-                MyConn.agregarproductoexistente(articulo, cantidad+MyConn.sacarunidades(articulo));
+                MyConn.agregarproductoexistente(articulo, cantidad);
             }
         });
     }
