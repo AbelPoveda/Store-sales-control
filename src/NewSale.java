@@ -17,6 +17,7 @@ public class NewSale {
     private JList lista;
     private double cantidadtotal = 0.0;
     private ArrayList<String> articuloscomprados = new ArrayList<>();
+    private ArrayList<Integer> unidadescopradas = new ArrayList<>();
 
     public NewSale() {
         DefaultListModel modelo = new DefaultListModel();
@@ -47,8 +48,9 @@ public class NewSale {
                 int unidades = Integer.parseInt(cantidad.getText());
                 double precio = MyConn.sacarprecio(articulo);
                 cantidadtotal += precio * unidades;
-                total.setText(String.valueOf(cantidadtotal));
+                total.setText(cantidadtotal+"€");
                 articuloscomprados.add(articulo);
+                unidadescopradas.add(unidades);
                 modelo.addElement(articulo + ": " + precio + " x " + unidades + " = " + precio * unidades + "€");
             }
         });
@@ -57,6 +59,14 @@ public class NewSale {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 disponibles.setText("Unidades disponibles: " + MyConn.sacarunidades(articulos.getSelectedItem().toString()));
+            }
+        });
+        botonfin.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (int a = 0; a<articuloscomprados.size();a++){
+                    MyConn.restarproductoexistente(articuloscomprados.get(a), unidadescopradas.get(a));
+                }
             }
         });
     }

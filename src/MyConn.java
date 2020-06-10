@@ -86,6 +86,18 @@ public class MyConn {
             System.out.println("error conexion: " + e);
         }
     }
+    public static void restarproductoexistente(String articulo, int cantidad) {
+        try {
+            Connection miconexion = DriverManager.getConnection(miConex, miUser, miPass);
+            Statement miStat = miconexion.createStatement();
+            int nuevacantidad = MyConn.sacarunidades(articulo) - cantidad;
+            miStat.executeUpdate("UPDATE productos SET cantidad=" + nuevacantidad + " WHERE nombre='" + articulo + "'");
+            miStat.close();
+            miconexion.close();
+        } catch (Exception e) {
+            System.out.println("error conexion: " + e);
+        }
+    }
     public static void agregarnuevoproducto(String nombre, int cantidad, double precio){
         try {
             Connection miconexion = DriverManager.getConnection(miConex, miUser, miPass);
